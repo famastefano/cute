@@ -1,4 +1,10 @@
+#include <stdio.h>
+
+#define FS_CUTE_PRINT(...) fprintf(fd, __VA_ARGS__)
+
 #include "../cute.h"
+
+FILE* fd;
 
 static void f( void )
 {
@@ -34,8 +40,10 @@ static void f( void )
 
 int main( void )
 {
+  fd = fopen( "file.log", "w+" );
   PRINT_DATA();
   f();
   PRINT_RESULTS();
+  fclose( fd );
   return 0;
 }

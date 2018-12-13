@@ -8,10 +8,10 @@
 #ifndef FS_CUTE_PRINT
 #  ifdef FS_CUTE_WCHAR
 #    include <wchar.h>
-#    define FS_CUTE_PRINT(fd, ...) fwprintf(fd, __VA_ARGS__)
+#    define FS_CUTE_PRINT(...) wprintf(__VA_ARGS__)
 #  else
 #    include <stdio.h>
-#    define FS_CUTE_PRINT(fd, ...) fprintf(fd, __VA_ARGS__)
+#    define FS_CUTE_PRINT(...) printf(__VA_ARGS__)
 #  endif
 #endif
 
@@ -28,12 +28,12 @@ static char const timestamp[] = __DATE__ " " __TIME__;
 
 #define PRINT_LEVEL(Level, ...) \
 if ( _scenario_level & Level ) {\
-  FS_CUTE_PRINT(stdout, "%s:%d\t", __FILE__, __LINE__); \
-  FS_CUTE_PRINT(stdout, __VA_ARGS__); \
-  FS_CUTE_PRINT(stdout, "\n"); \
+  FS_CUTE_PRINT("%s:%d\t", __FILE__, __LINE__); \
+  FS_CUTE_PRINT(__VA_ARGS__); \
+  FS_CUTE_PRINT("\n"); \
 }
 
-#define PRINT(...) FS_CUTE_PRINT(stdout, __VA_ARGS__)
+#define PRINT(...) FS_CUTE_PRINT(__VA_ARGS__)
 
 #define PRINT_DATA() PRINT("\t\t[CUTe] Data\n\tFile: '%s' built on '%s'\n\n", file_name, timestamp)
 
