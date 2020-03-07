@@ -129,3 +129,5 @@ PRINT_LEVEL(NOTIFY_INFO, "[%s] '%s'\n", _case_name, _case_desc)
 #define EXPECT_STR_GT(str0, str1) EXPECT(strcmp(str0, str1) > 0)
 #define EXPECT_STR_LTE(str0, str1) EXPECT(strcmp(str0, str1) <= 0)
 #define EXPECT_STR_GTE(str0, str1) EXPECT(strcmp(str0, str1) >= 0)
+
+#define CUTE_FAIL_COUNT() (fail)
