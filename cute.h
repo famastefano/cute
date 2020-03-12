@@ -1,5 +1,12 @@
+/*
+TODO: decomposition of MEM* and STR* assertions
+*/
+
+
+#ifndef _MSC_VER /* MSVC supported */
 #if __STDC_VERSION__ < 199901L
 #  error "C99 is required to use this library"
+#endif
 #endif
 
 #include <stdlib.h>
@@ -60,20 +67,29 @@ PRINT_LEVEL(NOTIFY_INFO, "[%s] '%s'\n", _case_name, _case_desc)
 #define FAIL_A(expr) PRINT_LEVEL(NOTIFY_FAIL, "[ASSERT] Assertion failed!\n\t'%s' is false.\n", #expr); ++total; ++fail
 #define PASS_A(expr) PRINT_LEVEL(NOTIFY_PASS, "[ASSERT] Assertion succeed!\n\t'%s' is true.\n", #expr); ++total
 
+#define FAIL_A_3(expr, a, sym, b) PRINT_LEVEL(NOTIFY_FAIL, "[ASSERT] Assertion failed!\n\t'%s (%lld " #sym " %lld)' is false.\n", #expr, (long long)a, (long long)b); ++total; ++fail
+#define PASS_A_3(expr, a, sym, b) PRINT_LEVEL(NOTIFY_PASS, "[ASSERT] Assertion succeed!\n\t'%s (%lld " #sym " %lld)' is true.\n", #expr, (long long)a, (long long)b); ++total
+
 #define FAIL_E(expr) PRINT_LEVEL(NOTIFY_FAIL, "[EXPECT] Assertion failed!\n\t'%s' is false.\n", #expr)
 #define PASS_E(expr) PRINT_LEVEL(NOTIFY_PASS, "[EXPECT] Assertion succeed!\n\t'%s' is true.\n", #expr)
+
+#define FAIL_E_3(expr, a, sym, b) PRINT_LEVEL(NOTIFY_FAIL, "[EXPECT] Assertion failed!\n\t'%s (%lld " #sym " %lld)' is false.\n", #expr, (long long)a, (long long)b)
+#define PASS_E_3(expr, a, sym, b) PRINT_LEVEL(NOTIFY_PASS, "[EXPECT] Assertion succeed!\n\t'%s (%lld " #sym " %lld)' is true.\n", #expr, (long long)a, (long long)b)
 
 #define ASSERT(expr) if(expr) { PASS_A(expr); } else { FAIL_A(expr); }
 #define EXPECT(expr) if(expr) { PASS_E(expr); } else { FAIL_E(expr); }
 
+#define ASSERT_3(expr, a, sym, b) if(expr) { PASS_A_3(expr, a, sym, b); } else { FAIL_A_3(expr, a, sym, b); }
+#define EXPECT_3(expr, a, sym, b) if(expr) { PASS_E_3(expr, a, sym, b); } else { FAIL_E_3(expr, a, sym, b); }
+
 /* ASSERT */
 
-#define ASSERT_EQ(a,b) ASSERT(a == b)
-#define ASSERT_NEQ(a,b) ASSERT(a != b)
-#define ASSERT_LT(a,b) ASSERT(a < b)
-#define ASSERT_LTE(a,b) ASSERT(a <= b)
-#define ASSERT_GT(a,b) ASSERT(a > b)
-#define ASSERT_GTE(a,b) ASSERT(a >= b)
+#define ASSERT_EQ(a,b) ASSERT_3(a == b, a, =, b)
+#define ASSERT_NEQ(a,b) ASSERT_3(a != b, a, !=, b)
+#define ASSERT_LT(a,b) ASSERT_3(a < b, a, <, b)
+#define ASSERT_LTE(a,b) ASSERT_3(a <= b, a, <=, b)
+#define ASSERT_GT(a,b) ASSERT_3(a > b, a, >, b)
+#define ASSERT_GTE(a,b) ASSERT_3(a >= b, a, >=, b)
 #define ASSERT_FALSE(expr) ASSERT(!(expr))
 #define ASSERT_NULL(expr) ASSERT((expr) == NULL)
 
@@ -100,14 +116,14 @@ PRINT_LEVEL(NOTIFY_INFO, "[%s] '%s'\n", _case_name, _case_desc)
 
 /* EXPECT */
 
-#define EXPECT_EQ(a,b) EXPECT(a == b)
-#define EXPECT_NEQ(a,b) EXPECT(a != b)
-#define EXPECT_LT(a,b) EXPECT(a < b)
-#define EXPECT_LTE(a,b) EXPECT(a <= b)
-#define EXPECT_GT(a,b) EXPECT(a > b)
-#define EXPECT_GTE(a,b) EXPECT(a >= b)
-#define EXPECT_FALSE(expr) EXPECT(!(expr))
-#define EXPECT_NULL(expr) EXPECT((expr) == NULL)
+#define EXPECT_EQ(a,b) EXPECT_3(a == b, a, =, b)
+#define EXPECT_NEQ(a,b) EXPECT_3(a != b, a, !=, b)
+#define EXPECT_LT(a,b) EXPECT_3(a < b, a, <, b)
+#define EXPECT_LTE(a,b) EXPECT_3(a <= b, a, <=, b)
+#define EXPECT_GT(a,b) EXPECT_3(a > b, a, >, b)
+#define EXPECT_GTE(a,b) EXPECT_3(a >= b, a, >=, b)
+#define EXPECT_FALSE(expr) EXPECT_3(!(expr))
+#define EXPECT_NULL(expr) EXPECT_3((expr) == NULL)
 
 #define EXPECT_IN_RANGE(lower, x, upper) EXPECT(lower <= x && x <= upper)
 #define EXPECT_NOT_IN_RANGE(lower, x, upper) EXPECT(lower > x || upper < x)
